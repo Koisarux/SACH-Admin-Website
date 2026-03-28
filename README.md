@@ -143,4 +143,4 @@ npm run preview
 
 ## 📄 License
 
-This project is marked as private (`"private": true` in `package.json`). Please contact the repository owner for administrative access or contribution guidelines.
+MIT License — feel free to use this project for learning or as a portfolio piece.
