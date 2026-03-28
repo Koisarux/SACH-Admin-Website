@@ -1,34 +1,30 @@
-# 🚓 SACH Admin Portal
+# 🚓 SACH Admin Portal (React UI Template)
 
-A **secure web-based administrative dashboard** designed for law enforcement officers to manage, verify, and track decentralized First Information Reports (FIRs). This React application serves as the official operational backend for the SACH ecosystem, complementing the citizen-facing mobile app.
+A **React-based administrative dashboard template** designed for law enforcement officers to manage and track First Information Reports (FIRs). This project is the static frontend architecture for the SACH ecosystem, ready to be integrated with a backend API.
 
 ---
 
 ## 🤔 What Does This Project Do?
 
-While citizens use the SACH mobile app to file reports on the blockchain, police officers and administrative staff need a powerful tool to process those reports. 
+This repository showcases the **frontend UI and layout** for a secure police dashboard. It provides the visual framework required for officers to process the reports filed by citizens.
 
-The **SACH Admin Portal** provides a centralized, secure interface for authorized personnel to:
-
-- 🔐 **Verify Officer Credentials** — Secure onboarding and authentication for law enforcement staff.
-- 📂 **Manage the FIR Database** — Search, filter, and review all FIRs lodged on the decentralized network.
-- 📝 **File Internal Reports** — Allow desk officers to manually file new FIRs on behalf of walk-in citizens.
-- 🚨 **Broadcast Safety Alerts** — Push emergency notifications and local alerts directly to citizens' mobile devices.
-- 🕵️ **Review Audit Logs** — Maintain strict accountability by tracking all internal system actions and data access.
+The UI template includes fully styled pages and routing for:
+- 🔐 **Authentication Flows** — Screens for officer login and secure registration.
+- 📂 **FIR Database Views** — Data table layouts designed for searching, filtering, and reviewing reports.
+- 📝 **Internal Reporting** — Form interfaces for desk officers to manually log incidents.
+- 🚨 **Alert Broadcasting** — UI components designed for drafting and sending public safety notices.
 
 ---
 
-## ✨ Key Features
-
-Built for speed, security, and ease of use, the portal includes:
+## ✨ Key Frontend Features
 
 | Feature | What It Means |
 |---------|---------------|
-| **Role-Based Workflows** | Distinct flows for authentication (`AuthLayout`) and internal operations (`DashboardLayout`) |
-| **Comprehensive Dashboard** | At-a-glance overview of jurisdiction metrics and recent filings |
-| **Bilingual Support** | Built-in `LanguageContext` to easily toggle the interface language |
-| **Deep Linking** | Dynamic routing to individual case files (e.g., `/dashboard/fir/:firId`) |
-| **Responsive Design** | Styled with Tailwind CSS for a seamless experience on both desktop monitors and tablets |
+| **Tailwind CSS Styling** | Modern, utility-first styling for a clean, professional, and responsive dashboard |
+| **React Router v7** | Pre-configured dynamic routing (e.g., navigating from the database to `/dashboard/fir/:id`) |
+| **Bilingual Architecture** | A `LanguageContext` wrapper established to easily toggle UI languages |
+| **Component-Based** | Reusable UI components (like Sidebars and Modals) for easy maintenance and scaling |
+| **Vite Tooling** | Lightning-fast local development and optimized production builds |
 
 ---
 
@@ -86,7 +82,7 @@ Make sure you have [Node.js](https://nodejs.org/) (v18+ recommended) installed o
 ### 1. Clone this repository
 
 ```bash
-git clone https://github.com/koisarux/sach-admin-website.git
+git clone [https://github.com/koisarux/sach-admin-website.git](https://github.com/koisarux/sach-admin-website.git)
 cd sach-admin-website
 ```
 
@@ -116,24 +112,24 @@ Open your browser and navigate to the local server address (usually `http://loca
 | Path | Component | Description |
 |--------|----------|-------------|
 | `/` | `WelcomePage` | Landing screen for the portal |
-| `/login` | `VerifyCredentials` | Officer login verification |
-| `/register` | `OfficerRegistration` | Secure onboarding for new personnel |
+| `/login` | `VerifyCredentials` | Officer login verification UI |
+| `/register` | `OfficerRegistration` | Secure onboarding UI for new personnel |
 
 ### Internal Dashboard (Requires Auth)
 | Path | Component | Description |
 |--------|----------|-------------|
 | `/dashboard` | `DashboardHome` | Main statistical overview |
-| `/dashboard/database` | `FIRDatabase` | Master list of all registered FIRs |
-| `/dashboard/fir/:id` | `FIRDetail` | Deep dive into a specific case |
+| `/dashboard/database` | `FIRDatabase` | Master list view of all registered FIRs |
+| `/dashboard/fir/:id` | `FIRDetail` | Deep dive view into a specific case |
 | `/dashboard/file-fir` | `FileNewFIR` | Interface to lodge a new report |
 | `/dashboard/send-alerts` | `SendAlerts` | Tool to broadcast public notices |
-| `/dashboard/audit` | `AuditLogs` | Immutable log of administrative actions |
+| `/dashboard/audit` | `AuditLogs` | Visual log of administrative actions |
 
 ---
 
 ## 🛠️ Build for Production
 
-When you are ready to deploy the admin panel to a live server:
+When you are ready to deploy the static admin panel:
 
 ```bash
 # 1. Create an optimized production build
