@@ -1,0 +1,568 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-deep: #060E08;
+  --color-bg-card: #0D1E11;
+  --color-sach-green: #01763A;
+  --color-sach-green-dark: #015C2E;
+  --color-sach-gold: #D4AF37;
+  --color-sach-emerald: #4CAF50;
+  --color-divider: #0E1F12;
+  --color-text-sub: #5A7A5D;
+  --color-input-bg: #091509;
+  --color-red-alert: #DC2626;
+
+  --font-sans: 'Roboto', system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Global Reset & Base ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg-deep);
+  color: white;
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar Styling ───────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-divider);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-sub);
+}
+
+/* ─── Gold accent link hover ──────────────────────────────────────────── */
+a,
+.gold-hover {
+  transition: color 0.2s ease;
+}
+
+a:hover,
+.gold-hover:hover {
+  color: var(--color-sach-gold) !important;
+}
+
+/* ─── Animations ──────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(1, 118, 58, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(1, 118, 58, 0.3);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes staggerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ─── Animation Utility Classes ───────────────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.4s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Stagger delay utilities */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-600 {
+  animation-delay: 600ms;
+}
+
+/* ─── Component Classes ───────────────────────────────────────────────── */
+@layer components {
+
+  /* Primary gradient button */
+  .btn-primary {
+    @apply w-full text-white font-bold py-4 rounded-xl transition-all duration-300 cursor-pointer text-center;
+    background: linear-gradient(135deg, var(--color-sach-green), var(--color-sach-green-dark));
+    box-shadow: 0 6px 16px rgba(1, 118, 58, 0.35);
+    border: none;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 8px 24px rgba(1, 118, 58, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  /* Secondary outline button */
+  .btn-outline {
+    @apply w-full border-2 text-white font-semibold py-4 rounded-xl transition-all duration-300 cursor-pointer text-center;
+    border-color: rgba(1, 118, 58, 0.4);
+    background-color: var(--color-input-bg);
+  }
+
+  .btn-outline:hover {
+    background-color: rgba(1, 118, 58, 0.1);
+    border-color: var(--color-sach-gold);
+    color: var(--color-sach-gold);
+  }
+
+  /* Input field */
+  .input-field {
+    @apply w-full rounded-xl px-4 py-4 text-white outline-none transition-all duration-300;
+    background-color: var(--color-input-bg);
+    border: 1.5px solid var(--color-divider);
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .input-field:focus {
+    border-color: var(--color-sach-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+  }
+
+  .input-field::placeholder {
+    color: var(--color-text-sub);
+  }
+
+  /* Select / dropdown */
+  .select-field {
+    @apply w-full rounded-xl px-4 py-4 text-white outline-none transition-all duration-300 appearance-none cursor-pointer;
+    background-color: var(--color-input-bg);
+    border: 1.5px solid var(--color-divider);
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B8C6E' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+
+  .select-field:focus {
+    border-color: var(--color-sach-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+  }
+
+  /* Card base */
+  .card {
+    @apply rounded-xl transition-all duration-300;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-divider);
+  }
+
+  .card:hover {
+    border-color: rgba(1, 118, 58, 0.3);
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply rounded-xl px-5 py-4 relative overflow-hidden transition-all duration-300;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-divider);
+  }
+
+  .stat-card:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.06);
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 100%;
+    opacity: 0.05;
+    transition: opacity 0.3s;
+  }
+
+  .stat-card:hover::after {
+    opacity: 0.1;
+  }
+
+  /* Table styles */
+  .table-header {
+    @apply text-xs font-bold uppercase tracking-wider;
+    color: var(--color-text-sub);
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  .table-row {
+    @apply transition-all duration-200;
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  .table-row:last-child {
+    border-bottom: none;
+  }
+
+  .table-row:hover {
+    background-color: rgba(1, 118, 58, 0.05);
+  }
+
+  .table-cell {
+    @apply py-4 px-5 text-sm;
+    border-right: 1px solid var(--color-divider);
+  }
+
+  .table-cell:last-child {
+    border-right: none;
+  }
+
+  /* Badge / chip */
+  .badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-pending {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background-color: rgba(212, 175, 55, 0.15);
+    color: var(--color-sach-gold);
+  }
+
+  .badge-active {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background-color: rgba(76, 175, 80, 0.15);
+    color: var(--color-sach-emerald);
+  }
+
+  .badge-resolved {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background-color: rgba(1, 118, 58, 0.15);
+    color: var(--color-sach-green);
+  }
+
+  /* Label */
+  .field-label {
+    @apply text-sm font-semibold mb-2 block;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .field-label .required {
+    color: var(--color-red-alert);
+    margin-left: 2px;
+  }
+
+  /* Eye button */
+  .btn-eye {
+    @apply flex items-center justify-center w-8 h-8 rounded-lg cursor-pointer transition-all duration-200;
+    background: rgba(1, 118, 58, 0.08);
+    border: 1px solid var(--color-divider);
+    color: var(--color-text-sub);
+  }
+
+  .btn-eye:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.4);
+    color: var(--color-sach-gold);
+  }
+
+  /* Validation error states */
+  .input-error {
+    border-color: var(--color-red-alert) !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+  }
+
+  .field-error-msg {
+    @apply text-xs mt-1 block;
+    color: var(--color-red-alert);
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .shake {
+    animation: shake 0.4s ease-out;
+  }
+}
+
+/* ─── Auth Page Left Panel Background Glow ────────────────────────────── */
+.auth-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.auth-glow-1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.12), transparent);
+  top: -80px;
+  left: -80px;
+}
+
+.auth-glow-2 {
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(1, 118, 58, 0.14), transparent);
+  bottom: -60px;
+  right: -60px;
+}
+
+.auth-glow-3 {
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(76, 175, 80, 0.1), transparent);
+  top: 45%;
+  left: 40%;
+}
+
+/* ─── Crescent Moon Logo ──────────────────────────────────────────────── */
+.crescent-container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(circle at 30% 30%, rgba(1, 118, 58, 0.25), rgba(5, 15, 8, 0.8));
+  border: 1.5px solid rgba(1, 118, 58, 0.3);
+  box-shadow: 0 0 30px rgba(1, 118, 58, 0.15);
+}
+
+/* ─── Stepper ─────────────────────────────────────────────────────────── */
+.stepper-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.stepper-circle.active {
+  background-color: var(--color-sach-gold);
+  color: #000;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+}
+
+.stepper-circle.done {
+  background-color: var(--color-sach-green);
+  color: #fff;
+}
+
+.stepper-circle.pending {
+  background-color: var(--color-divider);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.stepper-line {
+  flex: 1;
+  height: 2px;
+  margin: 0 8px;
+  transition: background-color 0.3s ease;
+}
+
+.stepper-label {
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+/* ─── Security Warning Box ────────────────────────────────────────────── */
+.security-warning {
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* ─── Info Box ────────────────────────────────────────────────────────── */
+.info-box {
+  background: rgba(1, 118, 58, 0.06);
+  border: 1px solid rgba(1, 118, 58, 0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+/* ─── Step Content Slide Animation ────────────────────────────────────── */
+.step-enter {
+  animation: slideInRight 0.35s ease-out forwards;
+}
+
+.step-exit {
+  animation: slideInLeft 0.35s ease-out forwards;
+}
+
+/* ─── Dashboard Glow ──────────────────────────────────────────────────── */
+.dashboard-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
