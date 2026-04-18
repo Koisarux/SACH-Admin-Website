@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { colors, DashboardHeader } from '../../theme';
+import { colors } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const auditData = [
@@ -49,7 +49,7 @@ const AuditLogs = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title={t('auditLogsTitle')} />
+
             <div className="p-8 space-y-6">
                 {/* Stat cards */}
                 <div className="grid grid-cols-3 gap-4">

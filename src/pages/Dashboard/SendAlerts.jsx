@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { colors, gradients, shadows, DashboardHeader } from '../../theme';
+import { colors, gradients, shadows } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const recentAlerts = [
@@ -33,7 +33,7 @@ const SendAlerts = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title={t('broadcastTitle')} />
+
             <div className="p-8">
                 <div className="grid grid-cols-5 gap-6">
                     {/* Left: Compose Alert */}

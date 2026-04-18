@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { colors, DashboardHeader, officer } from '../../theme';
+import { colors, officer } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const Toggle = ({ enabled, onToggle }) => (
@@ -84,7 +84,7 @@ const Settings = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title={t('settings')} />
+
             <div className="p-8 max-w-3xl">
                 {/* Officer Profile */}
                 <SectionCard

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { colors, gradients, shadows, cities, cityDistricts, categories, DashboardHeader, validators, formatCnic } from '../../theme';
+import { colors, gradients, shadows, cities, cityDistricts, categories, validators, formatCnic } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const FileNewFIR = () => {
@@ -300,7 +300,7 @@ const FileNewFIR = () => {
 
     return (
         <div className="min-h-screen flex flex-col" style={{ backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title={t('fileNewFIRTitle')} />
+
             {renderStepper()}
             <div className="flex-1 overflow-y-auto">
                 <div className={`max-w-2xl mx-auto p-8 ${shaking ? 'shake' : ''}`}>

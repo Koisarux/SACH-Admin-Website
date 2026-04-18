@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, gradients, shadows, DashboardHeader, EyeIcon, FolderIcon, ClockIcon, SearchLensIcon, CheckCircleIcon } from '../../theme';
+import { colors, gradients, shadows, EyeIcon, FolderIcon, ClockIcon, SearchLensIcon, CheckCircleIcon } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const allFIRs = [
@@ -168,7 +168,7 @@ const FIRDatabase = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily }}>
-            <DashboardHeader title={t('firDatabase')} />
+
             <div className="p-8 space-y-6">
                 {/* Stat Cards */}
                 <div className="grid grid-cols-4 gap-4">
