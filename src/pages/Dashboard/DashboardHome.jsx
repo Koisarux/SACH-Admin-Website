@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, gradients, shadows, officer, DashboardHeader, EyeIcon, FolderIcon, ClockIcon, SearchLensIcon, CheckCircleIcon } from '../../theme';
+import { colors, gradients, shadows, officer, EyeIcon, FolderIcon, ClockIcon, SearchLensIcon, CheckCircleIcon } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const recentCases = [
@@ -55,7 +55,7 @@ const DashboardHome = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title={t('dashboard')} />
+
 
             <div className="p-8 space-y-6">
                 {/* Officer Profile Card */}

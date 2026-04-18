@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, gradients, officer, DashboardHeader } from '../../theme';
+import { colors, gradients, officer } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const ProfilePage = () => {
@@ -33,7 +33,7 @@ const ProfilePage = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title={t('sachDigitalID')} />
+
             <div className="p-8 max-w-5xl mx-auto space-y-6">
                 {/* Hero Card */}
                 <div className="rounded-xl p-6 flex items-center justify-between" style={{ backgroundColor: colors.bgCard, border: `1px solid ${colors.divider}` }}>

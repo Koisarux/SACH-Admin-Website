@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { colors, gradients, shadows, DashboardHeader } from '../../theme';
+import { colors, gradients, shadows } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 
 const firDetailData = {
@@ -43,7 +43,7 @@ const FIRDetail = () => {
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: colors.bgDeep, fontFamily, fontSize }}>
-            <DashboardHeader title="Dashboard" />
+
             <div className="p-8">
                 {/* Breadcrumb + Status */}
                 <div className="flex items-center justify-between mb-6">

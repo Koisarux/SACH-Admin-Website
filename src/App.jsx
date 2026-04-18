@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LanguageProvider } from './LanguageContext';
+import { LanguageProvider, useLanguage } from './LanguageContext';
 import Sidebar from './components/Sidebar';
+import Header from './components/Header';
 import WelcomePage from './pages/Auth/WelcomePage';
 import VerifyCredentials from './pages/Auth/VerifyCredentials';
 import OfficerRegistration from './pages/Auth/OfficerRegistration';
@@ -14,16 +15,43 @@ import Settings from './pages/Dashboard/Settings';
 import ProfilePage from './pages/Dashboard/ProfilePage';
 import FIRDetail from './pages/Dashboard/FIRDetail';
 import AuthLayout from './pages/Auth/AuthLayout';
-import { colors } from './theme';
 
-const DashboardLayout = ({ children }) => (
-    <div className="flex min-h-screen" style={{ backgroundColor: colors.bgDeep, fontFamily: "'Roboto', sans-serif" }}>
-        <Sidebar />
-        <main className="flex-1 overflow-x-hidden">
-            {children}
-        </main>
-    </div>
-);
+// Page title mapping for the header (translation keys)
+const pageTitles = {
+    '/dashboard': 'dashboard',
+    '/dashboard/file-fir': 'fileNewFIRTitle',
+    '/dashboard/database': 'firDatabase',
+    '/dashboard/send-alerts': 'broadcastTitle',
+    '/dashboard/audit': 'auditLogsTitle',
+    '/dashboard/settings': 'settings',
+    '/dashboard/profile': 'sachDigitalID',
+};
+
+const DashboardLayout = ({ children }) => {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { t } = useLanguage();
+
+    // Determine title from current path
+    const path = window.location.pathname;
+    // Check for FIR detail route
+    const titleKey = path.startsWith('/dashboard/fir/') ? 'dashboard' : (pageTitles[path] || 'dashboard');
+    const title = t(titleKey);
+
+    return (
+        <div className="app-layout">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <div className="app-main">
+                <Header
+                    title={title}
+                    onMenuClick={() => setSidebarOpen(true)}
+                />
+                <div className="app-main-content">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 function App() {
   return (
