@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { colors, gradients, shadows } from '../../theme';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { colors, gradients, shadows, categories } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
+
+// Fix leaflet default marker icon
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
+
+const DraggableMarker = ({ position, setPosition, draggable = true }) => {
+    const markerRef = React.useRef(null);
+    const eventHandlers = useMemo(() => ({
+        dragend() { const m = markerRef.current; if (m) setPosition([m.getLatLng().lat, m.getLatLng().lng]); },
+    }), [setPosition]);
+    return <Marker draggable={draggable} position={position} ref={markerRef} eventHandlers={eventHandlers} />;
+};
+
+const RecenterMap = ({ center }) => {
+    const map = useMap();
+    React.useEffect(() => { map.flyTo(center, map.getZoom()); }, [center]);
+    return null;
+};
 
 const firDetailData = {
     'FIR-2025-001': {
@@ -27,6 +52,8 @@ const firDetailData = {
 // Fallback for any FIR ID not in the detail data
 const defaultFIR = firDetailData['FIR-2025-001'];
 
+const statusOptions = ['Pending', 'Active', 'Under Review', 'Resolved'];
+
 const FIRDetail = () => {
     const { firId } = useParams();
     const navigate = useNavigate();
@@ -34,6 +61,31 @@ const FIRDetail = () => {
 
     const fir = firDetailData[firId] || defaultFIR;
     const displayId = fir.caseId || `#${firId?.split('-').pop() || '0000'}`;
+
+    // Editing state
+    const [isEditing, setIsEditing] = useState(false);
+    const [editStatus, setEditStatus] = useState(fir.status);
+    const [editDescription, setEditDescription] = useState(fir.description);
+    const [editLocation, setEditLocation] = useState(fir.location);
+    const [editDate, setEditDate] = useState('2025-03-08');
+    const [editType, setEditType] = useState(fir.type);
+    const [mapCenter] = useState([31.5204, 74.3587]);
+    const [markerPos, setMarkerPos] = useState([31.5204, 74.3587]);
+
+    const handleSave = () => {
+        // In production, this would call the backend API
+        setIsEditing(false);
+        alert('Changes saved successfully. Backend integration pending.');
+    };
+
+    const handleCancel = () => {
+        setEditStatus(fir.status);
+        setEditDescription(fir.description);
+        setEditLocation(fir.location);
+        setEditDate(fir.date);
+        setEditType(fir.type);
+        setIsEditing(false);
+    };
 
     const fileIcon = (type) => {
         if (type === 'image') return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={colors.textSub} strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>;
@@ -52,13 +104,32 @@ const FIRDetail = () => {
                         <span style={{ color: colors.textSub }}>&gt;</span>
                         <span className="text-white font-semibold">{t('caseId')} {displayId}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: fir.status === 'Pending' ? 'rgba(212, 175, 55, 0.12)' : 'rgba(76, 175, 80, 0.12)', color: fir.status === 'Pending' ? colors.gold : colors.emerald, border: `1px solid ${fir.status === 'Pending' ? 'rgba(212, 175, 55, 0.3)' : 'rgba(76, 175, 80, 0.3)'}` }}>
-                            {fir.status}
-                        </span>
-                        <button className="px-5 py-2 rounded-lg text-sm font-bold text-white cursor-pointer transition-all" style={{ background: gradients.greenBtn, boxShadow: shadows.greenBtn, border: 'none' }}>
-                            {t('saveChanges')}
-                        </button>
+                    <div className="flex items-center gap-2">
+                        {isEditing ? (
+                            <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} className="select-field" style={{ fontSize: '12px', padding: '4px 10px', minWidth: '110px', height: '28px' }}>
+                                {statusOptions.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                        ) : (
+                            <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: editStatus === 'Pending' ? 'rgba(212, 175, 55, 0.12)' : editStatus === 'Active' ? 'rgba(76, 175, 80, 0.12)' : editStatus === 'Resolved' ? 'rgba(156,163,175,0.1)' : 'rgba(96,165,250,0.1)', color: editStatus === 'Pending' ? colors.gold : editStatus === 'Active' ? colors.emerald : editStatus === 'Resolved' ? '#9CA3AF' : '#60A5FA', border: `1px solid ${editStatus === 'Pending' ? 'rgba(212, 175, 55, 0.3)' : editStatus === 'Active' ? 'rgba(76, 175, 80, 0.3)' : editStatus === 'Resolved' ? 'rgba(156,163,175,0.2)' : 'rgba(96,165,250,0.2)'}` }}>
+                                {editStatus}
+                            </span>
+                        )}
+                        {isEditing ? (
+                            <div className="flex items-center gap-2">
+                                <button onClick={handleCancel} className="rounded-lg text-xs font-semibold cursor-pointer transition-all" style={{ padding: '5px 14px', background: 'transparent', border: `1px solid ${colors.divider}`, color: colors.textSub }}>
+                                    {t('cancel')}
+                                </button>
+                                <button onClick={handleSave} className="rounded-lg text-xs font-bold text-white cursor-pointer transition-all flex items-center gap-1.5" style={{ padding: '5px 14px', background: gradients.greenBtn, boxShadow: shadows.greenBtn, border: 'none' }}>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    {t('saveChanges')}
+                                </button>
+                            </div>
+                        ) : (
+                            <button onClick={() => setIsEditing(true)} className="rounded-lg text-xs font-bold text-white cursor-pointer transition-all flex items-center gap-1.5" style={{ padding: '5px 14px', background: gradients.greenBtn, boxShadow: shadows.greenBtn, border: 'none' }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                {t('edit')}
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -98,7 +169,10 @@ const FIRDetail = () => {
 
                         {/* Incident Description */}
                         <div className="rounded-xl p-6" style={{ backgroundColor: colors.bgCard, border: `1px solid ${colors.divider}` }}>
-                            <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">{t('incidentDescription')}</h3>
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-sm font-bold text-white uppercase tracking-wider">{t('incidentDescription')}</h3>
+                                {isEditing && <span className="text-[10px] font-semibold px-2 py-0.5 rounded" style={{ background: 'rgba(212,175,55,0.1)', color: colors.gold }}>EDITING</span>}
+                            </div>
                             <div className="grid grid-cols-3 gap-6 mb-5">
                                 <div>
                                     <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: colors.textSub }}>{t('caseId')}</p>
@@ -106,34 +180,52 @@ const FIRDetail = () => {
                                 </div>
                                 <div>
                                     <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: colors.textSub }}>{t('dateReported')}</p>
-                                    <p className="text-sm font-semibold text-white">{fir.date}</p>
+                                    {isEditing ? (
+                                        <input type="date" value={editDate} onChange={(e) => setEditDate(e.target.value)} className="input-field text-sm py-1.5 px-2" style={{ colorScheme: 'dark' }} />
+                                    ) : (
+                                        <p className="text-sm font-semibold text-white">{editDate}</p>
+                                    )}
                                 </div>
                                 <div>
                                     <p className="text-[10px] uppercase tracking-wider mb-0.5" style={{ color: colors.textSub }}>{t('incidentType')}</p>
-                                    <p className="text-sm font-semibold text-white">{fir.type}</p>
+                                    {isEditing ? (
+                                        <select value={editType} onChange={(e) => setEditType(e.target.value)} className="select-field text-sm py-1.5 px-2">
+                                            {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                                        </select>
+                                    ) : (
+                                        <p className="text-sm font-semibold text-white">{editType}</p>
+                                    )}
                                 </div>
                             </div>
                             <div>
                                 <p className="text-[10px] uppercase tracking-wider mb-2" style={{ color: colors.textSub }}>{t('fullDescription')}</p>
-                                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>{fir.description}</p>
+                                {isEditing ? (
+                                    <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={4} className="input-field text-sm resize-none" style={{ lineHeight: '1.6' }} />
+                                ) : (
+                                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>{editDescription}</p>
+                                )}
                             </div>
                         </div>
 
                         {/* Incident Location */}
                         <div className="rounded-xl p-6" style={{ backgroundColor: colors.bgCard, border: `1px solid ${colors.divider}` }}>
                             <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">{t('incidentLocation')}</h3>
-                            <div className="rounded-lg overflow-hidden" style={{ height: '260px', backgroundColor: colors.inputBg, border: `1px solid ${colors.divider}` }}>
-                                <div className="w-full h-full flex items-center justify-center relative">
-                                    {/* Map placeholder with location pin */}
-                                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(1,118,58,0.08), ${colors.inputBg})` }} />
-                                    <div className="relative flex flex-col items-center gap-2">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={colors.emerald} strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                        <span className="text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: colors.bgCard, color: 'white', border: `1px solid ${colors.divider}` }}>
-                                            {fir.location}
-                                        </span>
-                                    </div>
-                                </div>
+                            {isEditing ? (
+                                <input type="text" value={editLocation} onChange={(e) => setEditLocation(e.target.value)} className="input-field text-sm mb-3" />
+                            ) : null}
+                            <div className="rounded-lg overflow-hidden" style={{ height: '220px', border: `1px solid ${colors.divider}` }}>
+                                <MapContainer center={mapCenter} zoom={12} style={{ height: '100%', width: '100%' }} scrollWheelZoom={true}>
+                                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap' />
+                                    <DraggableMarker position={markerPos} setPosition={setMarkerPos} draggable={isEditing} />
+                                    <RecenterMap center={mapCenter} />
+                                </MapContainer>
                             </div>
+                            {!isEditing && (
+                                <p className="text-xs font-medium mt-2" style={{ color: colors.textSub }}>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={colors.emerald} strokeWidth="2" style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    {editLocation}
+                                </p>
+                            )}
                         </div>
                     </div>
 

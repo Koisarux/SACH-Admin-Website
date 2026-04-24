@@ -204,7 +204,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
           {/* Logout */}
           <button
-            onClick={() => { navigate('/'); onClose?.(); }}
+            onClick={() => { sessionStorage.removeItem('sach_auth'); navigate('/', { replace: true }); onClose?.(); }}
             style={{
               width: '100%',
               display: 'flex',

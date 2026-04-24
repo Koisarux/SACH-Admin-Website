@@ -204,6 +204,27 @@ const translations = {
         complaintFiled: 'Your complaint has been securely filed and anchored to the Hyperledger Blockchain.',
         viewDashboard: 'View Dashboard',
 
+        // Voice-to-text
+        recording: 'Recording...',
+        micNotSupported: 'Voice input is not supported in this browser. Please use Chrome.',
+        stopRecording: 'Stop Recording',
+
+        // Custom category
+        customCategory: 'Custom Category',
+        enterCustomCategory: 'Enter custom category name...',
+        confirm: 'Confirm',
+
+        // File upload
+        filesSelected: 'file(s) selected',
+        removeFile: 'Remove',
+        browseFiles: 'Browse files or drag & drop',
+        acceptedFormats: 'Images, Videos, PDFs (Max 25MB each)',
+
+        // Enhanced validation
+        nameLettersOnly: 'Name must contain only letters, spaces, and periods',
+        phoneFormatPk: 'Use format: +92 3XX XXXXXXX or 03XX-XXXXXXX',
+        descriptionMeaningful: 'Please provide a meaningful description',
+
         // Search
         search: 'Search...',
 
@@ -433,6 +454,27 @@ const translations = {
         eFIRSubmitted: 'ای-ایف آئی آر جمع ہو گئی!',
         complaintFiled: 'آپ کی شکایت محفوظ طریقے سے درج ہو کر ہائپر لیجر بلاک چین پر محفوظ ہو گئی ہے۔',
         viewDashboard: 'ڈیش بورڈ دیکھیں',
+
+        // Voice-to-text
+        recording: 'ریکارڈنگ...',
+        micNotSupported: 'اس براؤزر میں آواز سے متن کی سہولت دستیاب نہیں۔ براہ کرم کروم استعمال کریں۔',
+        stopRecording: 'ریکارڈنگ بند کریں',
+
+        // Custom category
+        customCategory: 'اپنی مرضی کی قسم',
+        enterCustomCategory: 'اپنی مرضی کی قسم کا نام درج کریں...',
+        confirm: 'تصدیق کریں',
+
+        // File upload
+        filesSelected: 'فائل(یں) منتخب',
+        removeFile: 'ہٹائیں',
+        browseFiles: 'فائلیں براؤز کریں یا ڈریگ اینڈ ڈراپ کریں',
+        acceptedFormats: 'تصاویر، ویڈیوز، پی ڈی ایف (زیادہ سے زیادہ 25MB فی فائل)',
+
+        // Enhanced validation
+        nameLettersOnly: 'نام میں صرف حروف، خالی جگہ اور نقطے ہونے چاہئیں',
+        phoneFormatPk: 'فارمیٹ استعمال کریں: +92 3XX XXXXXXX یا 03XX-XXXXXXX',
+        descriptionMeaningful: 'براہ کرم بامعنی تفصیل فراہم کریں',
 
         search: 'تلاش...',
 

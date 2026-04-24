@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, gradients, shadows, EyeIcon, FolderIcon, ClockIcon, SearchLensIcon, CheckCircleIcon } from '../../theme';
+import { colors, gradients, shadows, officer, EyeIcon, FolderIcon, ClockIcon, SearchLensIcon, CheckCircleIcon } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
+
+// Ranks that can assign officers (ASI and above)
+const highRanks = ['ASI', 'SI', 'Inspector', 'DSP', 'SP', 'SSP', 'DIG', 'AIG', 'IG'];
+const isHighRank = highRanks.some(r => officer.rank.toUpperCase().includes(r.toUpperCase()));
 
 const allFIRs = [
     { id: 'FIR-2025-001', cnic: '42101-*****42-2', category: 'Theft / Robbery', jurisdiction: 'Gulberg', status: 'Pending' },
@@ -23,11 +27,19 @@ const officersList = [
     { initials: 'SH', name: 'SI Hassan Shah', rank: 'Sub Inspector', station: 'SITE PS', badge: 'PK-38167', district: 'District West', available: true },
 ];
 
-const stats = [
-    { label: 'totalFIRs', value: 8, color: colors.gold, Icon: FolderIcon },
-    { label: 'pendingNew', value: 3, color: colors.textSub, Icon: ClockIcon },
-    { label: 'active', value: 3, color: colors.emerald, Icon: SearchLensIcon },
-    { label: 'resolved', value: 1, color: colors.green, Icon: CheckCircleIcon },
+// Filter FIRs by officer's jurisdiction scope
+// Officer sees FIRs from their district/city. Backend will replace this logic.
+const scopedFIRs = allFIRs.filter(f => {
+    const j = f.jurisdiction.toLowerCase();
+    return j.includes(officer.district.replace('District ', '').toLowerCase()) ||
+           j.includes(officer.city.toLowerCase());
+});
+
+const getStats = (firs) => [
+    { label: 'totalFIRs', value: firs.length, color: colors.gold, Icon: FolderIcon },
+    { label: 'pendingNew', value: firs.filter(f => f.status === 'Pending').length, color: colors.textSub, Icon: ClockIcon },
+    { label: 'active', value: firs.filter(f => f.status === 'Active').length, color: colors.emerald, Icon: SearchLensIcon },
+    { label: 'resolved', value: firs.filter(f => f.status === 'Resolved').length, color: colors.green, Icon: CheckCircleIcon },
 ];
 
 const statusBadge = (status) => {
@@ -156,14 +168,16 @@ const FIRDatabase = () => {
     const [categoryFilter, setCategoryFilter] = useState('All');
     const [assignModal, setAssignModal] = useState(null);
 
-    const filtered = allFIRs.filter(f => {
+    // Only show FIRs within this officer's jurisdiction scope
+    const filtered = scopedFIRs.filter(f => {
         const matchSearch = !search || f.id.toLowerCase().includes(search.toLowerCase()) || f.category.toLowerCase().includes(search.toLowerCase()) || f.cnic.includes(search);
         const matchStatus = statusFilter === 'All' || f.status === statusFilter;
         const matchCat = categoryFilter === 'All' || f.category === categoryFilter;
         return matchSearch && matchStatus && matchCat;
     });
 
-    const categories = ['All', ...new Set(allFIRs.map(f => f.category))];
+    const stats = getStats(scopedFIRs);
+    const categories = ['All', ...new Set(scopedFIRs.map(f => f.category))];
     const statuses = ['All', 'Pending', 'Active', 'Resolved', 'Under Review'];
 
     return (
@@ -219,7 +233,7 @@ const FIRDatabase = () => {
 
                 {/* Results count + File button */}
                 <div className="flex items-center justify-between">
-                    <p className="text-sm" style={{ color: colors.textSub }}>{t('showing')} <strong className="text-white">{filtered.length}</strong> {t('of')} {allFIRs.length} {t('records')}</p>
+                    <p className="text-sm" style={{ color: colors.textSub }}>{t('showing')} <strong className="text-white">{filtered.length}</strong> {t('of')} {scopedFIRs.length} {t('records')}</p>
                     <button onClick={() => navigate('/dashboard/file-fir')}
                         className="px-5 py-2.5 rounded-lg text-sm font-bold text-white flex items-center gap-2 transition-all duration-300 cursor-pointer"
                         style={{ background: gradients.greenBtn, boxShadow: shadows.greenBtn, border: 'none' }}
@@ -262,9 +276,11 @@ const FIRDatabase = () => {
                                         <td className="px-5 py-4" style={{ borderRight: `1px solid ${colors.tableBorder}` }}>{statusBadge(c.status)}</td>
                                         <td className="px-5 py-4 text-center">
                                             <div className="flex items-center justify-center gap-2">
+                                                {isHighRank && (
                                                 <button className="btn-eye" title={t('assignOfficer')} onClick={() => setAssignModal(c.id)}>
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                                 </button>
+                                                )}
                                                 <button className="btn-eye" title="View FIR" onClick={() => navigate(`/dashboard/fir/${c.id}`)}>
                                                     <EyeIcon size={16} />
                                                 </button>
