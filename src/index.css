@@ -67,6 +67,8 @@ body {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ─── Sidebar ─────────────────────────────────────────────────────────── */
@@ -646,4 +648,183 @@ a:hover,
   filter: blur(120px);
   pointer-events: none;
   z-index: 0;
+}
+
+/* ─── Voice-to-Text Recording Pulse ──────────────────────────────────── */
+@keyframes micPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+  }
+}
+
+.mic-recording {
+  animation: micPulse 1.2s ease-in-out infinite;
+  background: linear-gradient(135deg, #DC2626, #B91C1C) !important;
+}
+
+/* ─── Custom Category Modal ──────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-divider);
+  border-radius: 16px;
+  padding: 28px 32px;
+  max-width: 420px;
+  width: 90%;
+  animation: scaleIn 0.25s ease-out;
+}
+
+.modal-content h3 {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.modal-content p {
+  color: var(--color-text-sub);
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* ─── File Upload Previews ───────────────────────────────────────────── */
+.file-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.file-preview-item {
+  position: relative;
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-divider);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: scaleIn 0.2s ease-out;
+}
+
+.file-preview-item .file-name {
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  word-break: break-all;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-preview-item .file-size {
+  font-size: 10px;
+  color: var(--color-text-sub);
+}
+
+.file-preview-item .file-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  color: #DC2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.file-preview-item .file-remove-btn:hover {
+  background: rgba(220, 38, 38, 0.4);
+}
+
+.file-preview-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* ─── Leaflet Map Dark Overrides ─────────────────────────────────────── */
+.leaflet-container {
+  background: var(--color-bg-deep) !important;
+  border-radius: 12px;
+}
+
+.leaflet-control-zoom a {
+  background: var(--color-bg-card) !important;
+  color: white !important;
+  border-color: var(--color-divider) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(13, 30, 17, 0.85) !important;
+  color: var(--color-text-sub) !important;
+  font-size: 10px !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--color-sach-gold) !important;
+}
+
+/* ─── FIR Form Layout (sticky footer) ────────────────────────────────── */
+.fir-form-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.fir-form-scroll {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.fir-form-footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--color-divider);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

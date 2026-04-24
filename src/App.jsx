@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './LanguageContext';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -53,6 +53,14 @@ const DashboardLayout = ({ children }) => {
     );
 };
 
+// Auth guard — redirects to /login if session is missing
+const ProtectedRoute = ({ children }) => {
+    const isAuth = sessionStorage.getItem('sach_auth') === 'true';
+    const location = useLocation();
+    if (!isAuth) return <Navigate to="/login" state={{ from: location }} replace />;
+    return children;
+};
+
 function App() {
   return (
     <LanguageProvider>
@@ -64,14 +72,14 @@ function App() {
             <Route path="/register" element={<OfficerRegistration />} />
           </Route>
 
-          <Route path="/dashboard" element={<DashboardLayout><DashboardHome /></DashboardLayout>} />
-          <Route path="/dashboard/database" element={<DashboardLayout><FIRDatabase /></DashboardLayout>} />
-          <Route path="/dashboard/file-fir" element={<DashboardLayout><FileNewFIR /></DashboardLayout>} />
-          <Route path="/dashboard/send-alerts" element={<DashboardLayout><SendAlerts /></DashboardLayout>} />
-          <Route path="/dashboard/audit" element={<DashboardLayout><AuditLogs /></DashboardLayout>} />
-          <Route path="/dashboard/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
-          <Route path="/dashboard/profile" element={<DashboardLayout><ProfilePage /></DashboardLayout>} />
-          <Route path="/dashboard/fir/:firId" element={<DashboardLayout><FIRDetail /></DashboardLayout>} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout><DashboardHome /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/database" element={<ProtectedRoute><DashboardLayout><FIRDatabase /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/file-fir" element={<ProtectedRoute><DashboardLayout><FileNewFIR /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/send-alerts" element={<ProtectedRoute><DashboardLayout><SendAlerts /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/audit" element={<ProtectedRoute><DashboardLayout><AuditLogs /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/settings" element={<ProtectedRoute><DashboardLayout><Settings /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/profile" element={<ProtectedRoute><DashboardLayout><ProfilePage /></DashboardLayout></ProtectedRoute>} />
+          <Route path="/dashboard/fir/:firId" element={<ProtectedRoute><DashboardLayout><FIRDetail /></DashboardLayout></ProtectedRoute>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
