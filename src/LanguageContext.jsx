@@ -121,7 +121,7 @@ const translations = {
         education: 'Education',
         rankDesignation: 'Rank / Designation',
         lastUpdated: 'Last Updated',
-        securedBySACH: 'Secured by SACH • NADRA Verified',
+        securedBySACH: 'Secured by SACH • Blockchain Verified',
         privacyPolicy: 'Privacy Policy',
         termsOfService: 'Terms of Service',
         helpCenter: 'Help Center',

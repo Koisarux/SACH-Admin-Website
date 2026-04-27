@@ -88,11 +88,25 @@ export const categories = [
 export const validators = {
     cnic: (v) => /^\d{5}-\d{7}-\d$/.test(v),
     cnicPartial: (v) => /^[\d-]*$/.test(v) && v.replace(/-/g, '').length <= 13,
-    phone: (v) => /^\+?[\d\s-]{10,15}$/.test(v),
+    phone: (v) => { const d = v.replace(/[^\d]/g, ''); return d.length === 10 && /^3\d{9}$/.test(d); },
     badge: (v) => /^[A-Za-z]{1,4}-?\d{3,7}$/.test(v),
     email: (v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
     required: (v) => v && v.trim().length > 0,
     password: (v) => v && v.length >= 8,
+};
+
+export const formatPhone = (value) => {
+    // Strip everything except digits
+    let digits = value.replace(/[^\d]/g, '');
+    // Remove leading 92 if someone types it (we show +92 separately)
+    if (digits.startsWith('92')) digits = digits.slice(2);
+    // Remove leading 0 (habit: 03xx → 3xx)
+    if (digits.startsWith('0')) digits = digits.slice(1);
+    // First digit must be 3 — discard anything else
+    if (digits.length > 0 && digits[0] !== '3') digits = '';
+    // Cap at 10 digits
+    digits = digits.slice(0, 10);
+    return '+92 ' + digits;
 };
 
 export const formatCnic = (value) => {

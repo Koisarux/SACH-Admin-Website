@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, gradients, shadows, cities, cityDistricts, categories, validators, formatCnic } from '../../theme';
+import { colors, gradients, shadows, cities, cityDistricts, categories, validators, formatCnic, formatPhone } from '../../theme';
 import { useLanguage } from '../../LanguageContext';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -46,7 +46,7 @@ const FileNewFIR = () => {
     // Step 0: Citizen Info
     const [fullName, setFullName] = useState('');
     const [cnicNumber, setCnicNumber] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState('+92 ');
     const [email, setEmail] = useState('');
     const [gender, setGender] = useState('');
     const [dob, setDob] = useState('');
@@ -75,7 +75,7 @@ const FileNewFIR = () => {
 
     const resetForm = () => {
         setStep(0); setSlideDir('right'); setErrors({}); setShaking(false);
-        setFullName(''); setCnicNumber(''); setPhone(''); setEmail(''); setGender(''); setDob('');
+        setFullName(''); setCnicNumber(''); setPhone('+92 '); setEmail(''); setGender(''); setDob('');
         setAddress(''); setCity(''); setDistrict(''); setMapCenter([30.3753, 69.3451]); setMarkerPos([30.3753, 69.3451]);
         setIncidentDate(''); setIncidentTime(''); setCategory(''); setCustomCategory(''); setDescription('');
         setEvidenceFiles([]); setSubmitted(false); setIsRecording(false); setShowCategoryModal(false);
@@ -90,8 +90,7 @@ const FileNewFIR = () => {
             else if (!/^[A-Za-z\s.]+$/.test(fullName.trim())) e.fullName = t('nameLettersOnly');
             if (!validators.required(cnicNumber)) e.cnicNumber = 'CNIC is required';
             else if (!validators.cnic(cnicNumber)) e.cnicNumber = 'Use format: XXXXX-XXXXXXX-X';
-            if (!validators.required(phone)) e.phone = 'Phone number is required';
-            else if (!/^(\+92[\s-]?3\d{2}[\s-]?\d{7}|03\d{2}[\s-]?\d{7})$/.test(phone.replace(/\s/g,''))) e.phone = t('phoneFormatPk');
+            { const phoneDigits = phone.replace(/[^\d]/g, ''); if (phoneDigits.length < 3) e.phone = 'Phone number is required'; else if (!/^923\d{9}$/.test(phoneDigits)) e.phone = t('phoneFormatPk'); }
             if (email && !validators.email(email)) e.email = 'Enter a valid email address';
         } else if (s === 1) {
             if (!validators.required(address)) e.address = 'Street address is required';
@@ -212,7 +211,7 @@ const FileNewFIR = () => {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="field-label">{t('phoneNumber')} <span className="required">*</span></label>
-                        <input id="fir-phone" type="tel" value={phone} onChange={(e) => { setPhone(e.target.value); clearError('phone'); }} placeholder="+92 300 1234567" className={`input-field ${ec('phone')}`} />
+                        <input id="fir-phone" type="tel" value={phone} onChange={(e) => { setPhone(formatPhone(e.target.value)); clearError('phone'); }} placeholder="+92 3001234567" className={`input-field ${ec('phone')}`} maxLength={14} />
                         {err('phone')}
                     </div>
                     <div>
