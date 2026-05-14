@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { colors } from '../../theme';
+import sachLogo from '../../assets/sach_logo.png';
 
 const AuthLayout = () => {
     const location = useLocation();
@@ -16,16 +17,21 @@ const AuthLayout = () => {
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-col items-start justify-center flex-1 max-w-md mx-auto animate-fade-in">
-                    {/* Crescent Moon Logo */}
-                    <div className="crescent-container animate-float mb-10">
-                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                            <path d="M24 4C13 4 4 13 4 24s9 20 20 20c-8 0-14-7-14-16S16 12 24 12c3 0 5.5.8 7.5 2.2C29 6.5 24 4 24 4z" fill="white" opacity="0.95"/>
-                            <circle cx="32" cy="14" r="3" fill="white" opacity="0.9"/>
-                        </svg>
-                    </div>
+                    {/* SACH Logo */}
+                    <img
+                        src={sachLogo}
+                        alt="SACH"
+                        className="mb-0"
+                        style={{
+                            height: 120,
+                            width: 'auto',
+                            objectFit: 'contain',
+                            filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.4))',
+                        }}
+                    />
 
                     <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4 animate-slide-up" style={{ color: colors.gold }}>
-                        SACH Official Portal
+                        Admin Portal
                     </p>
                     <h1 className="text-4xl font-extrabold text-white leading-tight mb-4 animate-slide-up delay-100" style={{ opacity: 0 }}>
                         Secure Authenticated<br />Complaint Handling
