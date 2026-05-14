@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../LanguageContext';
 import { colors, gradients } from '../theme';
+import sachLogo from '../assets/sach_logo.png';
 
 const navItems = [
   {
@@ -116,31 +117,27 @@ const Sidebar = ({ isOpen, onClose }) => {
           height: 64,
           display: 'flex',
           alignItems: 'center',
-          gap: 12,
+          gap: 10,
           borderBottom: `1px solid ${colors.divider}`,
         }}>
+          <img
+            src={sachLogo}
+            alt="SACH"
+            style={{
+              height: 38,
+              width: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.3))',
+            }}
+          />
           <div style={{
-            width: 36,
-            height: 36,
-            borderRadius: 8,
-            background: gradients.greenBtn,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 14,
-            fontWeight: 900,
-            color: '#fff',
-          }}>
-            S
-          </div>
-          <div>
-            <h1 style={{ fontSize: 14, fontWeight: 800, color: '#fff', lineHeight: 1.2 }}>
-              {t('sachAdmin')}
-            </h1>
-            <p style={{ fontSize: 10, letterSpacing: 1.5, color: colors.emerald }}>
-              {t('policePortal')}
-            </p>
-          </div>
+            width: 1,
+            height: 24,
+            background: colors.divider,
+          }} />
+          <p style={{ fontSize: 9, letterSpacing: 1.8, color: colors.emerald, fontWeight: 600, textTransform: 'uppercase' }}>
+            Admin Portal
+          </p>
         </div>
 
         {/* Nav Items */}
